@@ -5,7 +5,7 @@
 
         <h4><?php echo $garage['description']; ?></h4>
 
-
+<a href="index.php" class="btn btn-primary">Retour aux garages</a>
 
                 <form action="saveAnnonce.php" method="post">
                 
