@@ -1,15 +1,7 @@
 <?php
+     require_once "core/database.php";
+    require_once "core/utils.php";
 
-//effacer un garage
-
-// on est basé sur GET    =>   monsite/deleteGarage.php?id=3
-
-
-
-
-//on va verifier ce que l'on trouve dans GET
-    //on veut qu'il ne soit pas vide
-    //on veut que ca soit un nombre
 
     if(!empty($_GET['id']) && ctype_digit($_GET['id'])){
 
@@ -24,15 +16,7 @@
 
 
 
-//on génère notre PDO   -> notre connection à la base de données
-        // avec les bons parametres (erreur, tableau associatif)
-
-
-$pdo = new PDO('mysql:host=localhost;dbname=garages','garage' ,'garage', [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION  ,
-    PDO::ATTR_DEFAULT_FETCH_MODE  =>    PDO::FETCH_ASSOC          
-    ]);
-
+        $pdo = getPdo();
 
 
 
@@ -41,11 +25,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=garages','garage' ,'garage', [
 
 
 
-$maRequete = $pdo->prepare("SELECT * FROM garages WHERE id =:garage_id");
-
-$maRequete->execute(['garage_id' => $garage_id]);
-
-$garage = $maRequete->fetch();
+$garage = findGarageById($garage_id);
 //si le garage n'existe pas
 if(!$garage){
     die("ce garage est inexistant");
@@ -58,6 +38,7 @@ $maRequete = $pdo->prepare("DELETE FROM garages WHERE id =:garage_id");
 
 $maRequete->execute(['garage_id' => $garage_id]);
 
-//faire un header vers index.php  (une redirection)
 
-header("Location: index.php");
+
+
+redirect('index.php');

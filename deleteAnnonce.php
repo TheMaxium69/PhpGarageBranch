@@ -1,4 +1,6 @@
-<?php
+<?php   
+  require_once "core/database.php";
+    require_once "core/utils.php";
     if(!empty($_GET['id']) && ctype_digit($_GET['id'])){
 
         $annonce_id = $_GET['id'];
@@ -12,12 +14,10 @@
      echo"salut c'est bon";
 
 
-     $pdo = new PDO('mysql:host=localhost;dbname=garages','garage' ,'garage', [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION  ,
-        PDO::ATTR_DEFAULT_FETCH_MODE  =>    PDO::FETCH_ASSOC          
-        ]);
 
-        
+
+
+     $pdo = getPdo();
 
 
 $maRequete = $pdo->prepare("SELECT * FROM annonces WHERE id =:annonce_id");
@@ -40,4 +40,9 @@ $maRequete->execute(['annonce_id' => $annonce_id]);
 
 //faire un header vers index.php  (une redirection)
 
-header("Location: garage.php?id=$garage_id");
+//header("Location: garage.php?id=$garage_id");
+
+
+
+
+redirect('garage.php?id='.$garage_id);

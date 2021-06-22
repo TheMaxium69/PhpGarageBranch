@@ -1,4 +1,7 @@
 <?php
+require_once "core/database.php";
+
+require_once "core/utils.php";
 
 $garage_id = null;
 $name = null;
@@ -23,17 +26,13 @@ if( !$garage_id || !$name || !$price ){
 }
 
 
-$pdo = new PDO('mysql:host=localhost;dbname=garages','garage' ,'garage', [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION  ,
-    PDO::ATTR_DEFAULT_FETCH_MODE  =>    PDO::FETCH_ASSOC          
-  ]);
 
 
-  $maRequete = $pdo->prepare("SELECT * FROM garages WHERE id =:garage_id");
 
-  $maRequete->execute(['garage_id' => $garage_id]);
+$pdo = getPdo();
 
-  $garage = $maRequete->fetch();
+
+  $garage = findGarageById($garage_id);
 
   if(!$garage){
 
@@ -50,24 +49,6 @@ $pdo = new PDO('mysql:host=localhost;dbname=garages','garage' ,'garage', [
 
                         ]);
 
-
-header("Location: garage.php?id=$garage_id");
-
+redirect('garage.php?id='.$garage_id);
 
 
-/// Surveiller POST
-
-// Verifier les trois données transmises par POST
-
-
-/// faire une requete pour verifier 
-//l'existance du garage
-//si le garage est inexistant, 
-//die("garage inexistant")
-
-//autrement
-
-
-//insérer la nouvelle annonce
-
-//redirection vers la page du garage

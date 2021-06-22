@@ -1,5 +1,7 @@
 <?php
 
+require_once "core/database.php";
+require_once "core/utils.php";
 
 $garage_id = null;
 
@@ -15,17 +17,16 @@ if(!$garage_id){
 }
 
 
-$pdo = new PDO('mysql:host=localhost;dbname=garages','garage' ,'garage', [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION  ,
-    PDO::ATTR_DEFAULT_FETCH_MODE  =>    PDO::FETCH_ASSOC          
-  ]);
 
 
-  $maRequete = $pdo->prepare("SELECT * FROM garages WHERE id =:garage_id");
+$pdo = getPdo();
 
-  $maRequete->execute(['garage_id' => $garage_id]);
 
-  $garage = $maRequete->fetch();
+  
+
+  $garage = findGarageById($garage_id);
+
+  
 
 
   $resultat =  $pdo->prepare('SELECT * FROM annonces WHERE garage_id = :garage_id');
@@ -36,27 +37,8 @@ $pdo = new PDO('mysql:host=localhost;dbname=garages','garage' ,'garage', [
 
 
 
-
-                            
-                            
-                            
-
-
-
   $titreDeLaPage = $garage['name'];
 
-    ob_start();
-
-    require_once "templates/garages/garage.html.php";
-
-
-
-  $contenuDeLaPage = ob_get_clean();
-
-  require_once "templates/layout.html.php";
-
-
-
-  //   echo $garage['description'];
-// développer le template garage.html.php
-//à partir de $garage insérer le tout dans layout.html.php
+ render('garages/garage',
+        compact('garage', 'annonces','titreDeLaPage')       
+);
